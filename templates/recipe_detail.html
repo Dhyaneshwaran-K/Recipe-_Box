@@ -1,0 +1,77 @@
+<!-- tempaltes/recipe_detail.html -->
+
+{% extends 'base.html' %}
+
+{%block content %}
+    <div class="submenu">
+        <a href="{% url 'recipe_new' %}">New Recipe</a>
+        <a href="{% url 'recipe_edit' recipe.id %}">Edit Recipe</a>
+        <a href="{% url 'recipe_delete' recipe.id %}">Delete Recipe</a>
+    </div>
+    <main>
+        <div class="recipe-detail">
+            <h2>{{ recipe.name }}</h2>
+            <p>Type: {{ recipe.type }}</p>
+            <p>Prep Time: {{ recipe.prep_time }}</p>
+            <p>Cook Time: {{ recipe.cook_time }}</p>            
+            <p>Servings: <span id="servings">{{ recipe.servings }}</span>  |  
+                <label for="multiplier">Multiplier: </label>
+                <select name="mulitplier" id="multiplier">
+                    <option value="1" selected="selected">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </p>
+            <h3>Ingredients</h3>
+            <ul>
+                {% for recipeingredient in recipe.recipeingredient_set.all %}
+                    <li>{% if recipeingredient.quantity != 0 %}<span class="ing_qty">{{ recipeingredient.quantity }}</span> {{ recipeingredient.units }}
+                        {% endif %}
+                        {{ recipeingredient.ingredient }}
+                        {% if recipeingredient.style == "" %}
+                            </li>
+                        {% else %}
+                            - {{recipeingredient.style }}</li>
+                        {% endif %}
+                {% empty %}
+                    <li>No ingredients</li>
+                {% endfor %}
+            </ul>
+            <h3>Directions</h3>
+            <p>{{ recipe.directions|linebreaksbr }}</p> <!--Added linebreaksbr - treats line breaks as new paragraphs -->
+        </div>
+    </main>
+    <script type="text/javascript">
+        const a = document.getElementById("multiplier");
+        var old_mult = a.options[a.selectedIndex].value;
+
+        a.addEventListener("change", multiply_ings);
+        a.addEventListener("mousedown", restore_qtys);
+        
+        // Updates the old multiplier global variable
+        function restore_qtys() {
+            var b = document.getElementById("multiplier");
+            old_mult = parseFloat(b.options[b.selectedIndex].value);
+            console.log(old_mult);
+        }
+
+        // Scales the recipe ingredients and number of servings by the factor in the dropdown (factor = new multipler / old multiplier)
+        // TODO - add rounding / data loss prevention
+        function multiply_ings() {
+            var mult = document.getElementById("multiplier");
+            var qtys = document.getElementsByClassName("ing_qty");
+            var servings = document.getElementById("servings");
+            
+            servings.innerHTML = parseFloat(servings.innerHTML) * (parseFloat(mult.options[mult.selectedIndex].value) / old_mult);
+
+            for (i=0; i < qtys.length; i++) {
+                qtys[i].innerHTML = parseFloat(qtys[i].innerHTML) * (parseFloat(mult.options[mult.selectedIndex].value) / old_mult);
+            }
+
+        }
+
+
+    </script>
+{% endblock content %}

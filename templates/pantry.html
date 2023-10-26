@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="submenu">
+        <a href="{% url 'recipe_new' %}">New Recipe</a>
+        <span> // </span>
+        <a href="{% url 'ingredients' %}">Ingredients</a>
+        <span> // </span>
+    </div>   
+    <main>
+        <table>
+            <tr>
+                <th>Ingredient</th>
+                <th>Qty</th>
+                <th>Measure</th>
+            </tr>
+            {% for item in pantry_items %}
+                <tr>
+                    <td>{{ item.item }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ item.units }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="3">Empty Pantry!</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </main> 
+{% endblock content %}

@@ -1,0 +1,19 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Recipe Box</title>
+        <link href="{% static 'recipe_store/css/base.css' %}" rel="stylesheet">
+    </head>
+    <body>
+        <header>
+            <nav>
+                <h1><a href="{% url 'home' %}" style="text-decoration: none;">Recipe Box</a></h1>
+            </nav> 
+        </header>
+        {% block content %}
+        {% endblock content %}
+        <footer></footer>
+    </body>
+</html>
