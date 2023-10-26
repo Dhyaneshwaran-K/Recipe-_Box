@@ -26,7 +26,7 @@ SECRET_KEY = 'y$(=fgb)ck64i%%m^za^2v5wm^e6n(xkyfuvhfhi)_oax#j^o3'
 # TODO - Change setting when moving to production
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["recipe-box-mwx6.onrender.com"]
 
 
 # Application definition
